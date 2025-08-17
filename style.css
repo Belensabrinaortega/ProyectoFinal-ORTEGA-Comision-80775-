@@ -55,7 +55,7 @@ button:hover {
 }
 
 .usuarioContainer {
-  background-color: #ffffff;
+  background-color: #fcfcfc;
   width: 700px;
   margin: 20px auto;
   padding: 20px;
@@ -63,7 +63,7 @@ button:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .usuario {
-  background-color: #f8f9fa;
+  background-color: #8ab384;
   padding: 15px;
   margin-bottom: 10px;
   border-radius: 4px;
