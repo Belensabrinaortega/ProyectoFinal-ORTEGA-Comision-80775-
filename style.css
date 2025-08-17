@@ -1,0 +1,80 @@
+html {
+  background-color: #e7fffba6;
+  margin: 0;
+  padding: 0;
+}
+
+#titulo {
+  text-align: center;
+  color: #000000;
+  font-size: 2.5em;
+  margin-top: 20px;
+  text-transform: uppercase;
+}
+
+.contenedorDatos {
+  background-color: #ffa6a6;
+  width: 700px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(238, 221, 221, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  color: #333333;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: 80%;
+  padding: 10px;
+  border: 1px solid #c0b7b7;
+  border-radius: 4px;
+  font-size: 1em;
+  box-sizing: border-box;
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+button {
+  background-color: #c5c5c5;
+  color: rgb(0, 0, 0);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+button:hover {
+  background-color: #f5ffbc;
+}
+
+.usuarioContainer {
+  background-color: #ffffff;
+  width: 700px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.usuario {
+  background-color: #f8f9fa;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.subtitulo {
+  text-align: center;
+  color: #000000;
+  font-size: 1.8em;
+  margin-top: 10px;
+  text-transform: uppercase;
+}

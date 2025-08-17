@@ -1,69 +1,130 @@
-// Variables
-let nombre
-let peso
-let altura
-let resultado
-let clasificacion
-let otroUsuario = 1;
-let arrayCalificaciones = [];
+let nombreUsuario;
+let apellidoUsuario;
+let peso;
+let altura;
+let usuario;
 
-// Funciones
-const mensajeBienvenida = () => {
-    return "Bienvenido a la calculadora de IMC (Índice de Masa Corporal). " + "Esta herramienta te ayudará a determinar tu estado de salud basado en tu peso y altura. "
-}
-const recopilarDatosUsuario = () => {
-    nombre = prompt("Introduce tu nombre:");
-    peso = parseFloat(prompt("Introduce tu peso en kg (ejemplo: 70)"));
-    while (isNaN(peso) || peso <= 0 || peso === null || peso === "" || peso === undefined) {
-        alert("Por favor, introduce un peso válido mayor que 0.");
-        peso = parseFloat(prompt("Introduce tu peso en kg (ejemplo: 70)"));
-    }
-    altura = parseFloat(prompt("Introduce tu altura en metros (ejemplo: 1.75)"));
-    while (isNaN(altura) || altura <= 0 || altura === null || altura === "" || altura === undefined) {
-        alert("Por favor, introduce una altura válida mayor que 0.");
-    }
-    return { nombre, peso, altura };
-}
-const calcularIMC = () => {
-    resultado = peso / (altura * altura);
-    if (resultado < 18.5) {
-        clasificacion = "Bajo peso";
-    }else if (resultado < 25) {
-        clasificacion = "Peso normal";
-    }else if (resultado < 30) {
-        clasificacion = "Sobrepeso";
-    }else if (resultado < 35) {
-        clasificacion = "Obesidad grado I";
-    }
-    else if (resultado < 40) {
-        clasificacion = "Obesidad grado II";
-    }
-    else {
-        clasificacion = "Obesidad grado III";
-    }
+//Funcion para promediar dos notas
+const calcularIMC = (peso, altura) => {
+  if (peso && altura) {
+    const imc = peso / (altura * altura);
+    return parseFloat(imc.toFixed(2)); // Redondear a dos decimales
+  }
+};
 
-    return alert(`${nombre} tu IMC es ${resultado} y tu clasificación es: ${clasificacion}`);
-}
-const añadirOtroUsuario = () => {
-    otroUsuario = parseInt(prompt("¿Deseas calcular el IMC de otro usuario? (1: Sí, 0: No)"));
-    do {
-        alert("Por favor, introduce 1 para Sí o 0 para No.");
-        otroUsuario = parseInt(prompt("¿Deseas calcular el IMC de otro usuario? (1: Sí, 0: No)"));
-    }
-    while (otroUsuario !== 1 && otroUsuario !== 0);
-}
-const despedida = () => {
-    return alert("Gracias por usar la calculadora de IMC. ¡Hasta luego!");
-}
+//Array con alumnos
+let usuarios = [];
 
-// Ejecución del programa
+const borrarDatos = () => {
+  borrarDelLocalStorage();
+  limpiarContenedorUsuarios();
+};
 
-alert(mensajeBienvenida());
-while (otroUsuario === 1) {
-    recopilarDatosUsuario();
-    calcularIMC();
-    arrayCalificaciones.push(clasificacion);
-    añadirOtroUsuario();
-}
-alert("Clasificaciones de IMC de todos los usuarios: " + arrayCalificaciones);
-despedida();
+//Guardar los datos en el local storage
+const guardarEnLocalStorage = () => {
+  localStorage.setItem("usuarios", JSON.stringify(usuarios));
+};
+
+//Recuperar los datos del local storage
+const recuperarDelLocalStorage = () => {
+  const datos = localStorage.getItem("usuarios");
+  if (datos) {
+    alumnos = JSON.parse(datos);
+  }
+};
+//borrar los datos del local storage
+const borrarDelLocalStorage = () => {
+  localStorage.removeItem("usuarios");
+  usuarios = [];
+  limpiarContenedorUsuarios();
+};
+
+//Recuperar los datos al cargar la pagina
+window.onload = recuperarDelLocalStorage();
+
+//Guardar los datos al cerrar la pagina
+window.onbeforeunload = guardarEnLocalStorage();
+
+// Funcion limpiar inputs
+const limpiarInputs = () => {
+  document.getElementById("nombreUsuario").value = "";
+  document.getElementById("peso").value = "";
+  document.getElementById("altura").value = "";
+};
+
+//validar los datos ingresados por el usuario
+const validarDatos = () => {
+  if (
+    nombreUsuario.trim() === "" ||
+    isNaN(peso) ||
+    isNaN(altura) ||
+    peso < 0 ||
+    peso > 600 ||
+    altura < 0 ||
+    altura > 8
+  ) {
+    alert("Por favor, complete todos los campos correctamente.");
+    return false;
+  } else return true;
+};
+
+const recolectarDatos = () => {
+  inputNombreUsuario = document.getElementById("nombreUsuario");
+  inputPeso = document.getElementById("peso");
+  inputAltura = document.getElementById("altura");
+  nombreUsuario = inputNombreUsuario.value;
+  peso = parseFloat(inputPeso.value);
+  altura = parseFloat(inputAltura.value);
+};
+
+//Funcion para agregar un usuario al array
+
+const agregarUsuario = () => {
+  recolectarDatos();
+  usuario = {
+    id: usuarios.length + 1,
+    nombre: nombreUsuario,
+    peso: peso,
+    altura: altura,
+  };
+
+  if (validarDatos()) {
+    usuarios.push(usuario);
+  }
+  guardarEnLocalStorage();
+  limpiarInputs();
+  limpiarContenedorUsuarios();
+};
+
+//renderizar los usuarios en la pantalla
+
+contenedorUsuarios = document.getElementById("usuariosContainer");
+
+const limpiarContenedorUsuarios = () => {
+  contenedorUsuarios.innerHTML = "";
+};
+
+const renderizarUsuarios = () => {
+  usuarios.forEach((usuario) => {
+    contenedorUsuarios.innerHTML += `
+      <div class="usuario" id="usuario"${usuario.id}">
+        <h3>Usuario: ${usuario.nombre}</h3> 
+        <p> Peso: ${usuario.peso} </p> 
+        <p> Altura: ${usuario.altura} </p>
+        <p> IMC: ${calcularIMC(usuario.peso, usuario.altura)}</p>
+        <p> Situación: ${
+          calcularIMC(usuario.peso, usuario.altura) < 18.5
+            ? "Bajo peso"
+            : calcularIMC(usuario.peso, usuario.altura) < 25
+            ? "Peso normal"
+            : calcularIMC(usuario.peso, usuario.altura) < 30
+            ? "Sobrepeso"
+            : calcularIMC(usuario.peso, usuario.altura) < 35
+            ? "Obesidad grado I"
+            : calcularIMC(usuario.peso, usuario.altura) < 40
+            ? "Obesidad grado II"
+            : "Obesidad grado III"
+        }</p>
+      </div>`;
+  });
+};
