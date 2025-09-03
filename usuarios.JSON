@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "nombre": "Juan Perez",
+    "peso": 75,
+    "altura": 1.75
+  },
+  {
+    "id": 2,
+    "nombre": "Maria Gomez",
+    "peso": 62,
+    "altura": 1.65
+  },
+  {
+    "id": 3,
+    "nombre": "Carlos Ruiz",
+    "peso": 90,
+    "altura": 1.8
+  },
+  {
+    "id": 4,
+    "nombre": "Lucia Fernandez",
+    "peso": 55,
+    "altura": 1.6
+  }
+]

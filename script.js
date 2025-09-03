@@ -1,5 +1,4 @@
 let nombreUsuario;
-let apellidoUsuario;
 let peso;
 let altura;
 let usuario;
@@ -12,12 +11,39 @@ const calcularIMC = (peso, altura) => {
   }
 };
 
-//Array con alumnos
+//Array con usuarios
 let usuarios = [];
 
 const borrarDatos = () => {
   borrarDelLocalStorage();
   limpiarContenedorUsuarios();
+};
+
+const validarBorrado = async () => {
+  const result = await Swal.fire({
+    title: "¿Está seguro que desea borrar todos los datos?",
+    text: "Esta acción no se puede deshacer.",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Sí, borrar todo.",
+    cancelButtonText: "No, cancelar.",
+  });
+  return result.isConfirmed;
+};
+
+const btnBorrarDatos = document.getElementById("BtnBorrarDatos");
+btnBorrarDatos.onclick = async function () {
+  const confirmado = await validarBorrado();
+  if (confirmado) {
+    borrarDatos();
+  } else {
+    await Swal.fire({
+      title: "Acción cancelada.",
+      text: "Los datos no fueron borrados.",
+      icon: "info",
+      confirmButtonText: "Continuar.",
+    });
+  }
 };
 
 //Guardar los datos en el local storage
@@ -52,18 +78,24 @@ const limpiarInputs = () => {
   document.getElementById("altura").value = "";
 };
 
+// funcion auxiliar de validacion de datos
+const esNombreValido = (nombre) => nombre.trim() !== "" && !/\d/.test(nombre);
+const esPesoValido = (peso) => !isNaN(peso) && peso >= 0 && peso <= 600;
+const esAlturaValida = (altura) => !isNaN(altura) && altura >= 0 && altura <= 8;
+
 //validar los datos ingresados por el usuario
 const validarDatos = () => {
   if (
-    nombreUsuario.trim() === "" ||
-    isNaN(peso) ||
-    isNaN(altura) ||
-    peso < 0 ||
-    peso > 600 ||
-    altura < 0 ||
-    altura > 8
+    !esNombreValido(nombreUsuario) ||
+    !esPesoValido(peso) ||
+    !esAlturaValida(altura)
   ) {
-    alert("Por favor, complete todos los campos correctamente.");
+    Swal.fire({
+      title: "Los datos ingresados no son validos.",
+      text: "Por favor, ingrese los datos correctamente.",
+      icon: "error",
+      confirmButtonText: "Continuar.",
+    });
     return false;
   } else return true;
 };
@@ -94,6 +126,11 @@ const agregarUsuario = () => {
   guardarEnLocalStorage();
   limpiarInputs();
   limpiarContenedorUsuarios();
+};
+
+btnAgregarUsuario = document.getElementById("BtnAgregarUsuario");
+btnAgregarUsuario.onclick = () => {
+  agregarUsuario();
 };
 
 //renderizar los usuarios en la pantalla
@@ -128,3 +165,63 @@ const renderizarUsuarios = () => {
       </div>`;
   });
 };
+
+const btnRenderizarUsuarios = document.getElementById("BtnRenderizarUsuarios");
+btnRenderizarUsuarios.onclick = () => {
+  if (usuarios.length === 0) {
+    Swal.fire({
+      title: "No hay usuarios para mostrar.",
+      text: "Por favor, ingrese los datos de un usuario.",
+      icon: "warning",
+      confirmButtonText: "Continuar.",
+    });
+    return;
+  }
+  renderizarUsuarios();
+};
+
+// Contenedor para usuarios que usaron la app en otros momentos
+const contenedorUsuariosOtro = document.getElementById("usuariosContainerOtro");
+
+let usuariosOtro = [];
+
+// fetch para traer alumnos de otros profesores
+const GetUsuariosOtro = async () => {
+  const response = await fetch("./usuarios.JSON");
+  const res = await response.json();
+  usuariosOtro = res;
+};
+
+GetUsuariosOtro();
+
+// renderizar alumnos de otros profesores
+
+const renderizarUsuariosOtro = () => {
+  usuariosOtro.forEach((usuarios) => {
+    contenedorUsuariosOtro.innerHTML += `
+      <div class="usuario">
+        <h3>Usuario: ${usuarios.nombre}</h3> 
+        <p> Peso: ${usuarios.peso} </p> 
+        <p> Altura: ${usuarios.altura} </p>
+        <p> IMC: ${calcularIMC(usuarios.peso, usuarios.altura)}</p>
+        <p> Situación: ${
+          calcularIMC(usuarios.peso, usuarios.altura) < 18.5
+            ? "Bajo peso"
+            : calcularIMC(usuarios.peso, usuarios.altura) < 25
+            ? "Peso normal"
+            : calcularIMC(usuarios.peso, usuarios.altura) < 30
+            ? "Sobrepeso"
+            : calcularIMC(usuarios.peso, usuarios.altura) < 35
+            ? "Obesidad grado I"
+            : calcularIMC(usuarios.peso, usuarios.altura) < 40
+            ? "Obesidad grado II"
+            : "Obesidad grado III"
+        }</p>
+      </div>`;
+  });
+};
+
+addEventListener("DOMContentLoaded", async () => {
+  await GetUsuariosOtro();
+  renderizarUsuariosOtro();
+});

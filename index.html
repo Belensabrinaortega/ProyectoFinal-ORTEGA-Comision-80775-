@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+    />
     <title>Calculadora de IMC</title>
   </head>
   <body>
@@ -20,9 +24,9 @@
       <input type="text" id="peso" name="peso" placeholder="80..." />
       <label for="altura">Ingrese su altura en metros.</label>
       <input type="text" id="altura" name="altura" placeholder="1.80..." />
-      <button onclick="agregarUsuario()">Calcular IMC.</button>
-      <button onclick="renderizarUsuarios()">Mostrar IMC ingresados.</button>
-      <button onclick="borrarDatos()">Borrar Usuarios.</button>
+      <button id="BtnAgregarUsuario">Calcular IMC.</button>
+      <button id="BtnRenderizarUsuarios">Mostrar IMC ingresados.</button>
+      <button id="BtnBorrarDatos">Borrar Usuarios.</button>
     </div>
 
     <div>
@@ -30,6 +34,12 @@
       <div id="usuariosContainer"></div>
     </div>
 
+    <div>
+      <h2 class="subtitulo">IMC CALCULADOS POR OTROS USUARIOS:</h2>
+      <div id="usuariosContainerOtro"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="script.js"></script>
   </body>
 </html>
