@@ -3,7 +3,7 @@ let peso;
 let altura;
 let usuario;
 
-//Funcion para promediar dos notas
+//Funcion para calcular el IMC
 const calcularIMC = (peso, altura) => {
   if (peso && altura) {
     const imc = peso / (altura * altura);
